@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: darkpattern-detection
+    env: python
+    buildCommand: "pip install -r requirements.txt && python -m spacy download en_core_web_sm && python scripts/train_all.py || true"
+    startCommand: "uvicorn api.main:app --host 0.0.0.0 --port $PORT"
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: HF_HUB_OFFLINE
+        value: "0"
