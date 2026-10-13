@@ -1,0 +1,68 @@
+# Dark Pattern Detection: Semantic–Linguistic Feature Fusion Configuration
+experiment_name: "darkpattern_fusion_4class"
+random_seed: 42
+
+paths:
+  raw_data: "data/dark-patterns(2).csv"
+  processed_dir: "data/processed"
+  train_data: "data/processed/train.csv"
+  val_data: "data/processed/val.csv"
+  test_data: "data/processed/test.csv"
+  output_dir: "outputs"
+  metrics_dir: "outputs/metrics"
+  figures_dir: "outputs/figures"
+  models_dir: "outputs/models"
+
+dataset:
+  primary_file: "data/dark-patterns(2).csv"
+  text_column: "Pattern String"
+  category_column: "Pattern Category"
+  url_column: "Website Page"
+  target_classes:
+    - "Social Proof"
+    - "Scarcity"
+    - "Urgency"
+    - "Misdirection"
+  excluded_classes:
+    - "Obstruction"
+    - "Sneaking"
+    - "Forced Action"
+  split_ratios:
+    train: 0.70
+    val: 0.15
+    test: 0.15
+
+linguistic_branch:
+  spacy_model: "en_core_web_sm"
+  feature_count: 40
+  proj_dim: 64
+  dropout: 0.2
+
+semantic_branch:
+  pretrained_checkpoint: "distilbert-base-uncased"
+  max_seq_length: 64
+  embedding_dim: 768
+
+fusion_classifier:
+  hidden_dim: 128
+  dropout: 0.2
+  num_classes: 4
+  class_names:
+    - "Social Proof"
+    - "Scarcity"
+    - "Urgency"
+    - "Misdirection"
+
+training:
+  batch_size: 32
+  epochs: 4
+  transformer_lr: 2.0e-5
+  linguistic_lr: 1.0e-3
+  weight_decay: 0.01
+  early_stopping_patience: 2
+
+comparative_models:
+  model_a: "TF-IDF + Multinomial Logistic Regression"
+  model_b: "DistilBERT Contextual Transformer-Only"
+  model_c: "spaCy Linguistic-Only Classifier"
+  model_d: "Semantic-Linguistic Late Fusion (Proposed)"

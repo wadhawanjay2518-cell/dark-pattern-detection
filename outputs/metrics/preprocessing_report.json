@@ -1,0 +1,156 @@
+{
+  "initial_dataset_verification": {
+    "total_raw_rows": 1818,
+    "detected_columns": [
+      "Pattern String",
+      "Comment",
+      "Pattern Category",
+      "Pattern Type",
+      "Where in website?",
+      "Deceptive?",
+      "Website Page"
+    ],
+    "text_column": "Pattern String",
+    "category_column": "Pattern Category",
+    "url_provenance_column": "Website Page",
+    "raw_category_distribution": {
+      "Scarcity": 679,
+      "Urgency": 481,
+      "Social Proof": 325,
+      "Misdirection": 270,
+      "Obstruction": 31,
+      "Sneaking": 26,
+      "Forced Action": 6
+    },
+    "raw_missing_values_per_column": {
+      "Pattern String": 306,
+      "Comment": 20,
+      "Pattern Category": 0,
+      "Pattern Type": 0,
+      "Where in website?": 0,
+      "Deceptive?": 0,
+      "Website Page": 0
+    }
+  },
+  "data_cleaning_and_exclusion": {
+    "missing_text_rows_excluded": 306,
+    "missing_text_by_category": {
+      "Urgency": 244,
+      "Misdirection": 33,
+      "Sneaking": 14,
+      "Social Proof": 11,
+      "Forced Action": 2,
+      "Obstruction": 1,
+      "Scarcity": 1
+    },
+    "rows_with_usable_text": 1512,
+    "exact_text_duplicates": 334,
+    "unique_text_count": 1178,
+    "excluded_categories_count": 46,
+    "excluded_categories_breakdown": {
+      "Obstruction": 30,
+      "Sneaking": 12,
+      "Forced Action": 4
+    },
+    "invalid_labels_count": 0,
+    "invalid_labels_breakdown": {}
+  },
+  "primary_4class_dataset": {
+    "eligible_sample_count": 1466,
+    "classes": [
+      "Social Proof",
+      "Scarcity",
+      "Urgency",
+      "Misdirection"
+    ],
+    "category_distribution": {
+      "Scarcity": 678,
+      "Social Proof": 314,
+      "Misdirection": 237,
+      "Urgency": 237
+    },
+    "class_proportions": {
+      "Scarcity": 0.4625,
+      "Social Proof": 0.2142,
+      "Misdirection": 0.1617,
+      "Urgency": 0.1617
+    },
+    "text_statistics": {
+      "min_chars": 6,
+      "max_chars": 615,
+      "mean_chars": 35.91,
+      "median_chars": 28.0,
+      "min_words": 1,
+      "max_words": 114,
+      "mean_words": 6.88
+    }
+  },
+  "split_metadata": {
+    "random_seed": 42,
+    "train_size": 1026,
+    "train_class_counts": {
+      "Scarcity": 474,
+      "Social Proof": 220,
+      "Urgency": 166,
+      "Misdirection": 166
+    },
+    "val_size": 220,
+    "val_class_counts": {
+      "Scarcity": 102,
+      "Social Proof": 47,
+      "Misdirection": 36,
+      "Urgency": 35
+    },
+    "test_size": 220,
+    "test_class_counts": {
+      "Scarcity": 102,
+      "Social Proof": 47,
+      "Urgency": 36,
+      "Misdirection": 35
+    }
+  },
+  "data_dictionary": {
+    "Pattern String": {
+      "description": "The exact interface text string extracted from the e-commerce webpage representing the potential dark pattern cue.",
+      "type": "string (text)",
+      "role": "Primary Model Input Feature",
+      "handling": "Sanitized (HTML entities decoded, whitespace normalized). Rows with null/empty text are excluded from model training."
+    },
+    "Pattern Category": {
+      "description": "The high-level dark pattern category according to e-commerce dark pattern taxonomies (e.g. Mathur et al., 2019).",
+      "type": "categorical string",
+      "role": "Classification Target Label",
+      "handling": "Primary experiment focuses on 4 classes: Social Proof, Scarcity, Urgency, Misdirection. Obstruction, Sneaking, and Forced Action are excluded without relabeling."
+    },
+    "Pattern Type": {
+      "description": "Specific sub-category or UI pattern mechanism (e.g., Activity Notification, Countdown Timer, Confirmshaming, Low-stock message).",
+      "type": "categorical string",
+      "role": "Metadata & Provenance",
+      "handling": "Preserved for error analysis and qualitative breakdown."
+    },
+    "Comment": {
+      "description": "Annotator observations detailing the visual or interactive presentation of the element (e.g., 'Periodic popup', 'Hardcoded in JS').",
+      "type": "string (text)",
+      "role": "Metadata & Provenance",
+      "handling": "Preserved for qualitative inspection."
+    },
+    "Where in website?": {
+      "description": "Location within the e-commerce purchase funnel where the cue was identified (Product Page, Cart Page, Home Page, Checkout Process, Other).",
+      "type": "categorical string",
+      "role": "Metadata & Provenance",
+      "handling": "Preserved for contextual reporting."
+    },
+    "Deceptive?": {
+      "description": "Annotator determination of whether the pattern was deceptive, non-deceptive, or context-dependent ('Yes', 'No', 'Depends').",
+      "type": "categorical string",
+      "role": "Metadata & Provenance",
+      "handling": "Preserved for exploratory analysis."
+    },
+    "Website Page": {
+      "description": "Full URL source provenance indicating the e-commerce website where the pattern instance was observed and collected.",
+      "type": "string (URL)",
+      "role": "Provenance / Origin URL",
+      "handling": "Preserved for verification and data audit."
+    }
+  }
+}

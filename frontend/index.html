@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dark Pattern Detection | Semantic–Linguistic Feature Fusion</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              900: '#312e81',
+            },
+            accent: {
+              scarcity: '#f59e0b',
+              urgency: '#ef4444',
+              social: '#06b6d4',
+              misdirection: '#8b5cf6',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans antialiased">
+
+  <!-- Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
+            <i class="ph-bold ph-shield-warning text-xl"></i>
+          </div>
+          <div>
+            <h1 class="text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2">
+              Dark Pattern Detection
+              <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-brand-50 text-brand-700 border border-brand-200">Research App</span>
+            </h1>
+            <p class="text-xs text-slate-500 font-medium">Semantic–Linguistic Feature Fusion for E-Commerce Text Classification</p>
+          </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <nav class="hidden md:flex space-x-1" id="navTabs">
+          <button data-tab="inference" class="nav-tab active px-3 py-2 rounded-lg text-sm font-medium transition-all text-brand-700 bg-brand-50">
+            <i class="ph ph-lightning mr-1"></i> Live Classifier
+          </button>
+          <button data-tab="benchmark" class="nav-tab px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all">
+            <i class="ph ph-chart-bar mr-1"></i> Model Benchmarks
+          </button>
+          <button data-tab="dataset" class="nav-tab px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all">
+            <i class="ph ph-database mr-1"></i> Dataset & Audit
+          </button>
+          <button data-tab="dictionary" class="nav-tab px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all">
+            <i class="ph ph-book-open mr-1"></i> Data Dictionary
+          </button>
+          <button data-tab="batch" class="nav-tab px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all">
+            <i class="ph ph-stack mr-1"></i> Batch Predict
+          </button>
+          <button data-tab="methodology" class="nav-tab px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all">
+            <i class="ph ph-article mr-1"></i> Paper & Colab
+          </button>
+        </nav>
+
+        <!-- System Status Badge -->
+        <div class="flex items-center space-x-2">
+          <div id="statusIndicator" class="flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span id="statusText">System Ready</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div class="md:hidden border-t border-slate-200 px-4 py-2 flex overflow-x-auto space-x-1" id="mobileNavTabs">
+      <button data-tab="inference" class="nav-tab active px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap bg-brand-50 text-brand-700">Classifier</button>
+      <button data-tab="benchmark" class="nav-tab px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap text-slate-600">Benchmarks</button>
+      <button data-tab="dataset" class="nav-tab px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap text-slate-600">Dataset</button>
+      <button data-tab="dictionary" class="nav-tab px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap text-slate-600">Dictionary</button>
+      <button data-tab="batch" class="nav-tab px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap text-slate-600">Batch</button>
+      <button data-tab="methodology" class="nav-tab px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap text-slate-600">Methodology</button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- TAB 1: INFERENCE & MULTI-MODEL COMPARISON -->
+    <section id="tab-inference" class="tab-pane active space-y-6">
+      
+      <!-- Intro Card -->
+      <div class="bg-gradient-to-r from-indigo-900 via-brand-900 to-slate-900 rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
+        <div class="relative z-10 max-w-3xl">
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-brand-500/30 text-brand-200 border border-brand-400/30">Undergraduate Research Evaluation</span>
+          <h2 class="text-2xl font-bold mt-2">Classify Interface Text into 4 Dark Pattern Categories</h2>
+          <p class="text-slate-300 text-sm mt-1">
+            Compare contextual DistilBERT embeddings against linguistic/syntactic features (imperatives, time markers, inventory quantities, social proof) and test the proposed late-fusion model.
+          </p>
+          <div class="mt-4 flex flex-wrap gap-2 text-xs font-medium">
+            <span class="px-2.5 py-1 rounded-md bg-cyan-500/20 text-cyan-200 border border-cyan-500/30"><i class="ph ph-users mr-1"></i> 1. Social Proof</span>
+            <span class="px-2.5 py-1 rounded-md bg-amber-500/20 text-amber-200 border border-amber-500/30"><i class="ph ph-hourglass-simple mr-1"></i> 2. Scarcity</span>
+            <span class="px-2.5 py-1 rounded-md bg-red-500/20 text-red-200 border border-red-500/30"><i class="ph ph-alarm mr-1"></i> 3. Urgency</span>
+            <span class="px-2.5 py-1 rounded-md bg-purple-500/20 text-purple-200 border border-purple-500/30"><i class="ph ph-arrows-split mr-1"></i> 4. Misdirection</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input and Presets Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Left: Input Control -->
+        <div class="lg:col-span-2 space-y-4">
+          <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+            <div class="flex justify-between items-center">
+              <label for="inputText" class="block text-sm font-semibold text-slate-800">
+                E-Commerce Text Input
+              </label>
+              <div class="flex items-center space-x-2">
+                <label for="modelSelect" class="text-xs font-medium text-slate-500">Model:</label>
+                <select id="modelSelect" class="text-xs bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                  <option value="model_d">Model D: Semantic–Linguistic Fusion (Proposed)</option>
+                  <option value="model_b">Model B: DistilBERT Contextual-Only</option>
+                  <option value="model_a">Model A: TF-IDF + Logistic Regression</option>
+                  <option value="model_c">Model C: Linguistic-Only Features</option>
+                  <option value="all">⚡ Compare All 4 Models Side-by-Side</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="relative">
+              <textarea id="inputText" rows="4" class="w-full rounded-xl border border-slate-200 p-3.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition" placeholder="Paste or type interface text (e.g., 'Hurry! Only 2 left in stock — 48 people viewing now')...">Hurry! Only 2 left in stock — 142 people are viewing right now!</textarea>
+            </div>
+
+            <div class="flex items-center justify-between pt-1">
+              <span id="charCount" class="text-xs text-slate-400">62 characters</span>
+              <div class="flex space-x-2">
+                <button id="btnClear" class="px-3 py-1.5 text-xs font-medium text-slate-500 hover:text-slate-800 transition">Clear</button>
+                <button id="btnPredict" class="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-xl shadow-md shadow-brand-500/25 transition-all flex items-center space-x-2">
+                  <i class="ph-bold ph-lightning"></i>
+                  <span>Analyze Text</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Quick Test Presets from Real Dataset -->
+            <div class="border-t border-slate-100 pt-4">
+              <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Preset Dataset Samples</div>
+              <div class="flex flex-wrap gap-2">
+                <button class="preset-btn px-2.5 py-1 rounded-lg bg-cyan-50 border border-cyan-200 text-cyan-800 text-xs font-medium hover:bg-cyan-100 transition" data-text="Faith in Glendale, United States purchased a Choose Your Flavors 5 Bag Sample Pack about 1 hour ago">
+                  👥 Social Proof Preset
+                </button>
+                <button class="preset-btn px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs font-medium hover:bg-amber-100 transition" data-text="Hurry! Only 2 left in stock">
+                  📦 Scarcity Preset
+                </button>
+                <button class="preset-btn px-2.5 py-1 rounded-lg bg-red-50 border border-red-200 text-red-800 text-xs font-medium hover:bg-red-100 transition" data-text="FLASH SALE | LIMITED TIME ONLY Shop Now">
+                  ⏰ Urgency Preset
+                </button>
+                <button class="preset-btn px-2.5 py-1 rounded-lg bg-purple-50 border border-purple-200 text-purple-800 text-xs font-medium hover:bg-purple-100 transition" data-text="OUR BEST SELLING GOGGLE — Was $120.00 Now $59.99">
+                  🔀 Misdirection Preset
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Multi-Model Comparison Panel (Appears when 'Compare All' selected) -->
+          <div id="multiModelCard" class="hidden bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+            <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <i class="ph-bold ph-columns text-brand-600"></i> Side-by-Side Model Comparison
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="multiModelGrid">
+              <!-- Cards dynamically inserted -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Results & Probabilities -->
+        <div class="space-y-4">
+          
+          <!-- Primary Prediction Card -->
+          <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Predicted Category</span>
+              <span id="latencyBadge" class="text-xs font-medium text-slate-400 bg-slate-100 px-2 py-0.5 rounded">-- ms</span>
+            </div>
+
+            <div id="resultContainer" class="space-y-3">
+              <div class="flex items-center space-x-3">
+                <div id="categoryIcon" class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 text-2xl font-bold">
+                  ?
+                </div>
+                <div>
+                  <h3 id="categoryTitle" class="text-xl font-extrabold text-slate-900">Awaiting Input</h3>
+                  <div class="flex items-center space-x-2 mt-0.5">
+                    <span id="confidenceBadge" class="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">0.0% Confidence</span>
+                    <span id="modelUsedBadge" class="text-xs text-slate-400">Model D</span>
+                  </div>
+                </div>
+              </div>
+              <p id="categoryDescription" class="text-xs text-slate-500 leading-relaxed">
+                Click 'Analyze Text' or select a preset to evaluate the cue across the research pipeline.
+              </p>
+            </div>
+
+            <!-- Probability Bars -->
+            <div class="border-t border-slate-100 pt-4 space-y-2.5">
+              <span class="text-xs font-semibold text-slate-600 block">Class Probabilities:</span>
+              
+              <div>
+                <div class="flex justify-between text-xs font-medium mb-1">
+                  <span class="text-cyan-700">Social Proof</span>
+                  <span id="probSocial" class="text-slate-600">0.0%</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                  <div id="barSocial" class="bg-cyan-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs font-medium mb-1">
+                  <span class="text-amber-700">Scarcity</span>
+                  <span id="probScarcity" class="text-slate-600">0.0%</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                  <div id="barScarcity" class="bg-amber-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs font-medium mb-1">
+                  <span class="text-red-700">Urgency</span>
+                  <span id="probUrgency" class="text-slate-600">0.0%</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                  <div id="barUrgency" class="bg-red-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs font-medium mb-1">
+                  <span class="text-purple-700">Misdirection</span>
+                  <span id="probMisdirection" class="text-slate-600">0.0%</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                  <div id="barMisdirection" class="bg-purple-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Observed Linguistic Cues -->
+            <div class="border-t border-slate-100 pt-4 space-y-2">
+              <span class="text-xs font-semibold text-slate-600 flex items-center gap-1.5">
+                <i class="ph-bold ph-magnifying-glass text-brand-600"></i> Detected Linguistic Features:
+              </span>
+              <div id="cuesContainer" class="space-y-1.5">
+                <span class="text-xs text-slate-400 italic">No features extracted yet.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 2: BENCHMARK & COMPARISONS -->
+    <section id="tab-benchmark" class="tab-pane hidden space-y-6">
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-6">
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 tracking-tight">Controlled Research Benchmark Results</h2>
+          <p class="text-sm text-slate-500 mt-1">
+            Evaluated on the exact same stratified test partition (220 samples, 15% of dataset). Fixed seed 42.
+          </p>
+        </div>
+
+        <!-- Metrics Comparison Table -->
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-slate-200 text-sm">
+            <thead class="bg-slate-50 text-slate-600 uppercase text-xs font-semibold">
+              <tr>
+                <th class="py-3 px-4 text-left">Model Architecture</th>
+                <th class="py-3 px-4 text-right">Accuracy</th>
+                <th class="py-3 px-4 text-right">Macro F1</th>
+                <th class="py-3 px-4 text-right">Weighted F1</th>
+                <th class="py-3 px-4 text-right">Macro Precision</th>
+                <th class="py-3 px-4 text-right">Macro Recall</th>
+                <th class="py-3 px-4 text-right">Train Time</th>
+              </tr>
+            </thead>
+            <tbody id="benchmarkTableBody" class="divide-y divide-slate-100">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Chart Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-4">
+          <!-- Model comparison chart -->
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+              <i class="ph-bold ph-chart-bar text-brand-600"></i> Macro F1 & Accuracy Comparison
+            </h3>
+            <div class="h-64">
+              <canvas id="benchmarkBarChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Per-Class Radar / Bar Chart -->
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+              <i class="ph-bold ph-target text-brand-600"></i> Proposed Model D Per-Class F1
+            </h3>
+            <div class="h-64">
+              <canvas id="perClassChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Confusion Matrix Display -->
+        <div class="border-t border-slate-100 pt-6">
+          <h3 class="text-base font-bold text-slate-900 mb-2">Confusion Matrix Analysis</h3>
+          <p class="text-xs text-slate-500 mb-4">Select a model to view its 4x4 classification contingency matrix on the held-out test set.</p>
+          
+          <div class="flex items-center space-x-2 mb-4">
+            <button class="cm-switch-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-brand-600 text-white" data-model="Model D: Late Fusion (Proposed)">Model D (Fusion)</button>
+            <button class="cm-switch-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200" data-model="Model B: DistilBERT-Only">Model B (DistilBERT)</button>
+            <button class="cm-switch-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200" data-model="Model A: TF-IDF + LogReg">Model A (TF-IDF)</button>
+            <button class="cm-switch-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200" data-model="Model C: Linguistic-Only">Model C (Linguistic)</button>
+          </div>
+
+          <div id="cmContainer" class="bg-slate-50 p-6 rounded-xl border border-slate-200 overflow-x-auto max-w-lg">
+            <!-- Dynamic 4x4 matrix -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: DATASET & AUDIT -->
+    <section id="tab-dataset" class="tab-pane hidden space-y-6">
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-900 tracking-tight">Dataset Verification & Preprocessing Audit</h2>
+            <p class="text-sm text-slate-500 mt-1">Source file: <code class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-xs font-mono">dark-patterns(2).csv</code></p>
+          </div>
+          <div class="flex space-x-2">
+            <a href="/audit" target="_blank" class="px-3.5 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition flex items-center gap-1.5">
+              <i class="ph ph-file-code"></i> Preprocessing JSON
+            </a>
+            <a href="/experiments" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-brand-50 border border-brand-200 text-xs font-semibold text-brand-700 hover:bg-brand-100 transition flex items-center gap-1.5">
+              <i class="ph ph-download-simple"></i> Benchmark Metrics
+            </a>
+          </div>
+        </div>
+
+        <!-- Audit Summary Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+            <span class="text-xs text-slate-500 font-medium block">Total Raw Rows</span>
+            <span id="statRawRows" class="text-xl font-extrabold text-slate-900">1,818</span>
+            <span class="text-[10px] text-slate-400 block mt-0.5">Initial CSV verification</span>
+          </div>
+          <div class="bg-red-50 p-3.5 rounded-xl border border-red-200">
+            <span class="text-xs text-red-700 font-medium block">Missing Text</span>
+            <span id="statMissingText" class="text-xl font-extrabold text-red-900">306</span>
+            <span class="text-[10px] text-red-500 block mt-0.5">Safely excluded</span>
+          </div>
+          <div class="bg-emerald-50 p-3.5 rounded-xl border border-emerald-200">
+            <span class="text-xs text-emerald-700 font-medium block">Usable Text</span>
+            <span id="statUsableText" class="text-xl font-extrabold text-emerald-900">1,512</span>
+            <span class="text-[10px] text-emerald-600 block mt-0.5">Sanitized strings</span>
+          </div>
+          <div class="bg-amber-50 p-3.5 rounded-xl border border-amber-200">
+            <span class="text-xs text-amber-700 font-medium block">Excluded Classes</span>
+            <span id="statExcludedClasses" class="text-xl font-extrabold text-amber-900">46</span>
+            <span class="text-[10px] text-amber-600 block mt-0.5">Non-target categories</span>
+          </div>
+          <div class="bg-indigo-50 p-3.5 rounded-xl border border-indigo-200">
+            <span class="text-xs text-indigo-700 font-medium block">Eligible 4-Class</span>
+            <span id="statTargetRows" class="text-xl font-extrabold text-indigo-900">1,466</span>
+            <span class="text-[10px] text-indigo-600 block mt-0.5">Primary experiment</span>
+          </div>
+          <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+            <span class="text-xs text-slate-500 font-medium block">Train / Val / Test</span>
+            <span class="text-sm font-bold text-slate-900 block mt-1">1026 / 220 / 220</span>
+            <span class="text-[10px] text-slate-400 block mt-0.5">70% / 15% / 15%</span>
+          </div>
+        </div>
+
+        <!-- Filterable Sample Browser -->
+        <div class="border-t border-slate-100 pt-4 space-y-3">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <h3 class="text-sm font-bold text-slate-900">Sample Dataset Records</h3>
+            <div class="flex space-x-2 w-full sm:w-auto">
+              <select id="filterCategory" class="text-xs bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 font-medium text-slate-700 focus:outline-none">
+                <option value="">All 4 Categories</option>
+                <option value="Social Proof">Social Proof</option>
+                <option value="Scarcity">Scarcity</option>
+                <option value="Urgency">Urgency</option>
+                <option value="Misdirection">Misdirection</option>
+              </select>
+              <input type="text" id="filterSearch" placeholder="Search text..." class="text-xs bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 focus:outline-none w-40">
+            </div>
+          </div>
+
+          <div class="overflow-x-auto border border-slate-200 rounded-xl">
+            <table class="min-w-full divide-y divide-slate-200 text-xs">
+              <thead class="bg-slate-50 text-slate-600 uppercase font-semibold">
+                <tr>
+                  <th class="py-2.5 px-3 text-left">Pattern String</th>
+                  <th class="py-2.5 px-3 text-left">Category</th>
+                  <th class="py-2.5 px-3 text-left">Pattern Type</th>
+                  <th class="py-2.5 px-3 text-left">Location</th>
+                  <th class="py-2.5 px-3 text-left">Origin URL</th>
+                </tr>
+              </thead>
+              <tbody id="datasetSampleTable" class="divide-y divide-slate-100 font-normal">
+                <!-- Dynamically loaded samples -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: DATA DICTIONARY -->
+    <section id="tab-dictionary" class="tab-pane hidden space-y-6">
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-6">
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 tracking-tight">Dataset Column Dictionary</h2>
+          <p class="text-sm text-slate-500 mt-1">
+            Formal data dictionary explaining all columns, data types, research roles, and preprocessing rules.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="dataDictionaryGrid">
+          <!-- Populated from API -->
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: BATCH PREDICTION -->
+    <section id="tab-batch" class="tab-pane hidden space-y-6">
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 tracking-tight">Batch E-Commerce Text Classification</h2>
+          <p class="text-sm text-slate-500 mt-1">Enter one interface string per line to evaluate in bulk.</p>
+        </div>
+
+        <div class="space-y-3">
+          <textarea id="batchInput" rows="6" class="w-full rounded-xl border border-slate-200 p-3.5 text-xs font-mono text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500" placeholder="Enter one string per line...&#10;Hurry! Only 2 left in stock&#10;142 shoppers bought this in the past 24 hours&#10;FLASH SALE: Expires in 10 minutes&#10;Compare at $99.00 — Now only $39.99">Hurry! Only 2 left in stock
+142 shoppers bought this in the past 24 hours
+FLASH SALE: Expires in 10 minutes
+Compare at $99.00 — Now only $39.99</textarea>
+
+          <div class="flex justify-between items-center">
+            <span class="text-xs text-slate-400">Max 500 lines per batch</span>
+            <button id="btnRunBatch" class="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-xl shadow-md shadow-brand-500/25 transition">
+              Process Batch
+            </button>
+          </div>
+        </div>
+
+        <div id="batchResultsContainer" class="hidden border-t border-slate-100 pt-4 space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="text-xs font-bold text-slate-800">Batch Results (<span id="batchCount">0</span> records)</span>
+            <button id="btnDownloadBatchCsv" class="px-3 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium transition flex items-center gap-1">
+              <i class="ph ph-file-csv"></i> Download CSV
+            </button>
+          </div>
+
+          <div class="overflow-x-auto border border-slate-200 rounded-xl">
+            <table class="min-w-full divide-y divide-slate-200 text-xs">
+              <thead class="bg-slate-50 text-slate-600 uppercase font-semibold">
+                <tr>
+                  <th class="py-2.5 px-3 text-left">Text String</th>
+                  <th class="py-2.5 px-3 text-left">Predicted Category</th>
+                  <th class="py-2.5 px-3 text-right">Confidence</th>
+                </tr>
+              </thead>
+              <tbody id="batchTableBody" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: PAPER & METHODOLOGY -->
+    <section id="tab-methodology" class="tab-pane hidden space-y-6">
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-6">
+        <div>
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-indigo-50 text-indigo-700 border border-indigo-200">Undergraduate Research Paper</span>
+          <h2 class="text-2xl font-bold text-slate-900 mt-2">Semantic–Linguistic Feature Fusion Methodology</h2>
+          <p class="text-sm text-slate-600 mt-1 leading-relaxed">
+            Investigating whether combining contextual transformer embeddings with fine-grained linguistic feature vectors improves classification across e-commerce dark patterns.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+          <div class="space-y-3 p-5 rounded-xl bg-slate-50 border border-slate-200">
+            <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <i class="ph-bold ph-lightbulb text-brand-600"></i> The Research Hypothesis
+            </h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Standard transformers encode general distributional semantics but may under-weight explicit, domain-specific syntactic constructions that characterize dark patterns—such as imperative verb moods, explicit countdown units, simulated social proof noun phrases, and comparative pricing modifiers. We hypothesize that <strong>late feature fusion</strong> provides inductive linguistic bias that enhances precision in ambiguous or subtle instances.
+            </p>
+          </div>
+
+          <div class="space-y-3 p-5 rounded-xl bg-slate-50 border border-slate-200">
+            <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <i class="ph-bold ph-git-fork text-brand-600"></i> Fusion Architecture Design
+            </h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              <strong>Branch A:</strong> spaCy-extracted linguistic vector (33 dimensions) &rarr; Linear(33, 64) &rarr; LayerNorm &rarr; GELU &rarr; Dropout(0.2).<br>
+              <strong>Branch B:</strong> DistilBERT contextual encoder &rarr; [CLS] representation (768 dimensions).<br>
+              <strong>Late Fusion Head:</strong> Concat(768 + 64 = 832) &rarr; Linear(832, 128) &rarr; LayerNorm &rarr; GELU &rarr; Linear(128, 4 classes).
+            </p>
+          </div>
+        </div>
+
+        <!-- Colab Link Box -->
+        <div class="bg-gradient-to-r from-slate-900 to-indigo-950 text-white rounded-2xl p-6 shadow-md space-y-3">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center justify-center text-xl font-bold">
+              <i class="ph-bold ph-code"></i>
+            </div>
+            <div>
+              <h3 class="text-base font-bold">Executable Google Colab Notebook</h3>
+              <p class="text-xs text-slate-300">Run the entire training workflow with free GPU acceleration in your browser.</p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            The project includes <code class="px-1.5 py-0.5 rounded bg-white/10 text-amber-200">notebooks/dark_pattern_fusion_colab.ipynb</code>, containing full dependency setups, data loaders, feature extractors, and complete training pipelines for Models A, B, C, and D.
+          </p>
+          <div class="pt-2">
+            <a href="/static/../notebooks/dark_pattern_fusion_colab.ipynb" download class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md transition">
+              <i class="ph-bold ph-download"></i>
+              <span>Download Colab Notebook (.ipynb)</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+      <p>Dark Pattern Detection &bull; Semantic–Linguistic Feature Fusion Research Project</p>
+      <p class="text-slate-400">Trained on 1,466 verified e-commerce pattern records &bull; 4 Target Categories</p>
+    </div>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

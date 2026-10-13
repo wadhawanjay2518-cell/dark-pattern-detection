@@ -1,0 +1,78 @@
+{
+  "total_test_samples": 220,
+  "total_errors": 6,
+  "overall_error_rate": 0.0273,
+  "sample_discrepancies": [
+    {
+      "index": 71,
+      "text": "Score! You've Qualified for a Checkout Bonus",
+      "true_class": "Misdirection",
+      "predicted_class": "Urgency",
+      "confidence": 0.4924,
+      "salient_linguistic_cues": {
+        "uppercase_ratio": 0.139,
+        "exclamation_count": 1.0
+      }
+    },
+    {
+      "index": 106,
+      "text": "Hurry, this style is selling fast!",
+      "true_class": "Scarcity",
+      "predicted_class": "Misdirection",
+      "confidence": 0.3866,
+      "salient_linguistic_cues": {
+        "uppercase_ratio": 0.037,
+        "exclamation_count": 1.0,
+        "time_expression_count": 2.0
+      }
+    },
+    {
+      "index": 112,
+      "text": "Hurry, this style is selling fast!",
+      "true_class": "Scarcity",
+      "predicted_class": "Misdirection",
+      "confidence": 0.3866,
+      "salient_linguistic_cues": {
+        "uppercase_ratio": 0.037,
+        "exclamation_count": 1.0,
+        "time_expression_count": 2.0
+      }
+    },
+    {
+      "index": 116,
+      "text": "Sorry, this is out of stock. You just missed it.",
+      "true_class": "Scarcity",
+      "predicted_class": "Misdirection",
+      "confidence": 0.9302,
+      "salient_linguistic_cues": {
+        "uppercase_ratio": 0.056,
+        "quantity_scarcity_cues": 1.0
+      }
+    },
+    {
+      "index": 156,
+      "text": "What people are saying about us...",
+      "true_class": "Social Proof",
+      "predicted_class": "Misdirection",
+      "confidence": 0.7641,
+      "salient_linguistic_cues": {
+        "uppercase_ratio": 0.038,
+        "social_reference_cues": 1.0
+      }
+    },
+    {
+      "index": 216,
+      "text": "LIMITED TIME OFFER : Grab a Matching Pair & save up 60%!",
+      "true_class": "Misdirection",
+      "predicted_class": "Urgency",
+      "confidence": 0.827,
+      "salient_linguistic_cues": {
+        "uppercase_ratio": 0.487,
+        "exclamation_count": 1.0,
+        "time_expression_count": 1.0,
+        "comparative_price_cues": 1.0,
+        "digit_token_ratio": 0.071
+      }
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.env
+.venv
+venv/
+
+# PyTorch and Hugging Face models / checkpoints
+checkpoints/
+models/*.pt
+models/*.bin
+models/saved_models/
+*.pt
+*.bin
+*.safetensors
+
+# Dataset raw and processed caches (can be regenerated via download_dataset.py)
+# data/raw/*.tsv
+# Note: small processed metadata can be tracked if desired, but checkpoints excluded.
+
+# Logs and outputs
+logs/
+*.log
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Node / Next.js
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+.next/
+node_modules/
+
+# OS specific
+.DS_Store
+Thumbs.db

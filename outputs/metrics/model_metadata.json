@@ -1,0 +1,347 @@
+{
+  "app_title": "Dark Pattern Detection: Semantic\u2013Linguistic Feature Fusion",
+  "model_version": "1.0.0",
+  "target_classes": [
+    "Social Proof",
+    "Scarcity",
+    "Urgency",
+    "Misdirection"
+  ],
+  "label_map": {
+    "0": "Social Proof",
+    "1": "Scarcity",
+    "2": "Urgency",
+    "3": "Misdirection"
+  },
+  "feature_definitions": {
+    "length_char": "Total character count of the sanitized text string.",
+    "length_token": "Total token count parsed by spaCy.",
+    "length_word": "Count of alphanumeric word tokens.",
+    "avg_token_len": "Average character length per token.",
+    "uppercase_ratio": "Proportion of uppercase letters among alphabetic characters.",
+    "exclamation_count": "Count of exclamation mark punctuation characters.",
+    "question_count": "Count of question mark punctuation characters.",
+    "pos_prop_VERB": "Proportion of tokens tagged as VERB (action/process verbs).",
+    "pos_prop_NOUN": "Proportion of tokens tagged as NOUN (common nouns).",
+    "pos_prop_ADJ": "Proportion of tokens tagged as ADJ (qualitative adjectives).",
+    "pos_prop_ADV": "Proportion of tokens tagged as ADV (adverbial modifiers).",
+    "pos_prop_PRON": "Proportion of tokens tagged as PRON (personal/relative pronouns).",
+    "pos_prop_NUM": "Proportion of tokens tagged as NUM (cardinal numbers).",
+    "pos_prop_AUX": "Proportion of tokens tagged as AUX (auxiliary and modal verbs).",
+    "pos_prop_CCONJ": "Proportion of coordinating conjunctions (and, but, or).",
+    "pos_prop_SCONJ": "Proportion of subordinating conjunctions (if, because, while).",
+    "pos_prop_DET": "Proportion of determiners (the, a, this, that).",
+    "pos_prop_PUNCT": "Proportion of punctuation tokens.",
+    "dep_prop_nsubj": "Proportion of nominal subject dependency relations.",
+    "dep_prop_dobj": "Proportion of direct object dependency relations.",
+    "dep_prop_advmod": "Proportion of adverbial modifier dependency relations.",
+    "dep_prop_amod": "Proportion of adjectival modifier dependency relations.",
+    "dep_prop_prep": "Proportion of prepositional modifier dependency relations.",
+    "max_tree_depth": "Maximum dependency tree depth representing syntactic embedding complexity.",
+    "is_imperative": "Binary indicator for directive/imperative clause (base verb root without explicit subject).",
+    "is_verb_initial": "Binary indicator for sentence starting with a verb or auxiliary.",
+    "modal_count": "Count of modal auxiliary verbs (can, could, will, would, must, should, may, might).",
+    "modal_prop": "Proportion of modal auxiliary verbs relative to token count.",
+    "negation_count": "Count of negation dependency tokens (neg) or negative particles (no, not, never).",
+    "has_negation": "Binary indicator for the presence of negation.",
+    "pron_1p_count": "Count of 1st-person pronouns (I, me, my, we, us, our).",
+    "pron_2p_count": "Count of 2nd-person directive pronouns (you, your, yours).",
+    "pron_3p_count": "Count of 3rd-person pronouns (he, she, it, they, them, their).",
+    "time_expression_count": "Frequency of temporal interval markers (seconds, minutes, hours, days, now, soon, today).",
+    "has_time_expression": "Binary indicator for presence of temporal constraint markers.",
+    "quantity_scarcity_cues": "Frequency of stock/inventory and scarcity markers (left, stock, remaining, only, sold, claimed).",
+    "comparative_price_cues": "Frequency of comparative pricing/discount cues (save, off, was, regular, discount, best, deal).",
+    "social_reference_cues": "Frequency of crowd/social activity markers (people, viewed, bought, others, purchased, customers, demand).",
+    "digit_token_ratio": "Proportion of tokens containing digits or numerical quantities.",
+    "has_currency_or_percent": "Binary indicator for presence of currency symbols ($, \u00a3, \u20ac) or percentage signs (%)."
+  },
+  "device": "mps",
+  "experiments": {
+    "Model A: TF-IDF + LogReg": {
+      "macro_f1": 0.9415,
+      "macro_precision": 0.9525,
+      "macro_recall": 0.9404,
+      "accuracy": 0.9591,
+      "weighted_f1": 0.9578,
+      "weighted_precision": 0.9632,
+      "weighted_recall": 0.9591,
+      "roc_auc_ovr_macro": 0.9966,
+      "confusion_matrix": [
+        [
+          47,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          101,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          36,
+          0
+        ],
+        [
+          5,
+          0,
+          3,
+          27
+        ]
+      ],
+      "per_class": {
+        "Social Proof": {
+          "precision": 0.8868,
+          "recall": 1.0,
+          "f1_score": 0.94,
+          "support": 47
+        },
+        "Scarcity": {
+          "precision": 1.0,
+          "recall": 0.9902,
+          "f1_score": 0.9951,
+          "support": 102
+        },
+        "Urgency": {
+          "precision": 0.9231,
+          "recall": 1.0,
+          "f1_score": 0.96,
+          "support": 36
+        },
+        "Misdirection": {
+          "precision": 1.0,
+          "recall": 0.7714,
+          "f1_score": 0.871,
+          "support": 35
+        }
+      },
+      "classes": [
+        "Social Proof",
+        "Scarcity",
+        "Urgency",
+        "Misdirection"
+      ],
+      "training_time_sec": 0.03,
+      "model_name": "Model A: TF-IDF + Logistic Regression",
+      "model_code": "model_a"
+    },
+    "Model C: Linguistic-Only": {
+      "macro_f1": 0.8663,
+      "macro_precision": 0.8712,
+      "macro_recall": 0.8624,
+      "accuracy": 0.8909,
+      "weighted_f1": 0.8897,
+      "weighted_precision": 0.8891,
+      "weighted_recall": 0.8909,
+      "roc_auc_ovr_macro": 0.9752,
+      "confusion_matrix": [
+        [
+          45,
+          1,
+          0,
+          1
+        ],
+        [
+          1,
+          96,
+          3,
+          2
+        ],
+        [
+          3,
+          6,
+          26,
+          1
+        ],
+        [
+          0,
+          1,
+          5,
+          29
+        ]
+      ],
+      "per_class": {
+        "Social Proof": {
+          "precision": 0.9184,
+          "recall": 0.9574,
+          "f1_score": 0.9375,
+          "support": 47
+        },
+        "Scarcity": {
+          "precision": 0.9231,
+          "recall": 0.9412,
+          "f1_score": 0.932,
+          "support": 102
+        },
+        "Urgency": {
+          "precision": 0.7647,
+          "recall": 0.7222,
+          "f1_score": 0.7429,
+          "support": 36
+        },
+        "Misdirection": {
+          "precision": 0.8788,
+          "recall": 0.8286,
+          "f1_score": 0.8529,
+          "support": 35
+        }
+      },
+      "classes": [
+        "Social Proof",
+        "Scarcity",
+        "Urgency",
+        "Misdirection"
+      ],
+      "training_time_sec": 0.01,
+      "model_name": "Model C: Linguistic-Only Classifier",
+      "model_code": "model_c"
+    },
+    "Model B: DistilBERT-Only": {
+      "macro_f1": 0.9721,
+      "macro_precision": 0.9737,
+      "macro_recall": 0.9708,
+      "accuracy": 0.9773,
+      "weighted_f1": 0.9771,
+      "weighted_precision": 0.9772,
+      "weighted_recall": 0.9773,
+      "roc_auc_ovr_macro": 0.9996,
+      "confusion_matrix": [
+        [
+          46,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          101,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          36,
+          0
+        ],
+        [
+          0,
+          2,
+          1,
+          32
+        ]
+      ],
+      "per_class": {
+        "Social Proof": {
+          "precision": 1.0,
+          "recall": 0.9787,
+          "f1_score": 0.9892,
+          "support": 47
+        },
+        "Scarcity": {
+          "precision": 0.9806,
+          "recall": 0.9902,
+          "f1_score": 0.9854,
+          "support": 102
+        },
+        "Urgency": {
+          "precision": 0.973,
+          "recall": 1.0,
+          "f1_score": 0.9863,
+          "support": 36
+        },
+        "Misdirection": {
+          "precision": 0.9412,
+          "recall": 0.9143,
+          "f1_score": 0.9275,
+          "support": 35
+        }
+      },
+      "classes": [
+        "Social Proof",
+        "Scarcity",
+        "Urgency",
+        "Misdirection"
+      ],
+      "training_time_sec": 65.16,
+      "best_val_macro_f1": 0.9827,
+      "model_name": "Model B: DistilBERT-Only",
+      "model_code": "model_b"
+    },
+    "Model D: Late Fusion (Proposed)": {
+      "macro_f1": 0.966,
+      "macro_precision": 0.9598,
+      "macro_recall": 0.973,
+      "accuracy": 0.9727,
+      "weighted_f1": 0.9731,
+      "weighted_precision": 0.9742,
+      "weighted_recall": 0.9727,
+      "roc_auc_ovr_macro": 0.9987,
+      "confusion_matrix": [
+        [
+          46,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          99,
+          0,
+          3
+        ],
+        [
+          0,
+          0,
+          36,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          33
+        ]
+      ],
+      "per_class": {
+        "Social Proof": {
+          "precision": 1.0,
+          "recall": 0.9787,
+          "f1_score": 0.9892,
+          "support": 47
+        },
+        "Scarcity": {
+          "precision": 1.0,
+          "recall": 0.9706,
+          "f1_score": 0.9851,
+          "support": 102
+        },
+        "Urgency": {
+          "precision": 0.9474,
+          "recall": 1.0,
+          "f1_score": 0.973,
+          "support": 36
+        },
+        "Misdirection": {
+          "precision": 0.8919,
+          "recall": 0.9429,
+          "f1_score": 0.9167,
+          "support": 35
+        }
+      },
+      "classes": [
+        "Social Proof",
+        "Scarcity",
+        "Urgency",
+        "Misdirection"
+      ],
+      "training_time_sec": 45.96,
+      "best_val_macro_f1": 0.9774,
+      "model_name": "Model D: Semantic-Linguistic Fusion",
+      "model_code": "model_d"
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "dataset_audit": {
+    "total_records": 2356,
+    "columns": [
+      "page_id",
+      "text",
+      "label",
+      "Pattern Category"
+    ],
+    "missing_values": {
+      "page_id": 0,
+      "text": 0,
+      "label": 0,
+      "Pattern Category": 0
+    },
+    "label_distribution": {
+      "1": 1178,
+      "0": 1178
+    },
+    "pattern_categories": {
+      "Not Dark Pattern": 1178,
+      "Scarcity": 418,
+      "Social Proof": 312,
+      "Urgency": 210,
+      "Misdirection": 195,
+      "Obstruction": 27,
+      "Sneaking": 12,
+      "Forced Action": 4
+    },
+    "unique_page_ids": 1248,
+    "exact_text_duplicates": 0,
+    "normalized_text_duplicates": 98,
+    "text_length_stats": {
+      "min_chars": 1,
+      "max_chars": 857,
+      "mean_chars": 43.2,
+      "median_chars": 26.0,
+      "mean_words": 7.43
+    }
+  },
+  "split_metadata": {
+    "train_size": 1413,
+    "train_class_balance": {
+      "0": 707,
+      "1": 706
+    },
+    "val_size": 471,
+    "val_class_balance": {
+      "1": 236,
+      "0": 235
+    },
+    "test_size": 472,
+    "test_class_balance": {
+      "0": 236,
+      "1": 236
+    },
+    "page_leakage": {
+      "train_val_page_overlap": 0,
+      "train_test_page_overlap": 0,
+      "val_test_page_overlap": 0
+    },
+    "text_template_overlap": {
+      "train_val_template_overlap": 20,
+      "train_test_template_overlap": 20,
+      "val_test_template_overlap": 17
+    }
+  }
+}

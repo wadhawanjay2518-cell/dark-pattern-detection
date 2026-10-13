@@ -1,0 +1,288 @@
+{
+  "Model A: TF-IDF + LogReg": {
+    "macro_f1": 0.9415,
+    "macro_precision": 0.9525,
+    "macro_recall": 0.9404,
+    "accuracy": 0.9591,
+    "weighted_f1": 0.9578,
+    "weighted_precision": 0.9632,
+    "weighted_recall": 0.9591,
+    "roc_auc_ovr_macro": 0.9966,
+    "confusion_matrix": [
+      [
+        47,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        101,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        36,
+        0
+      ],
+      [
+        5,
+        0,
+        3,
+        27
+      ]
+    ],
+    "per_class": {
+      "Social Proof": {
+        "precision": 0.8868,
+        "recall": 1.0,
+        "f1_score": 0.94,
+        "support": 47
+      },
+      "Scarcity": {
+        "precision": 1.0,
+        "recall": 0.9902,
+        "f1_score": 0.9951,
+        "support": 102
+      },
+      "Urgency": {
+        "precision": 0.9231,
+        "recall": 1.0,
+        "f1_score": 0.96,
+        "support": 36
+      },
+      "Misdirection": {
+        "precision": 1.0,
+        "recall": 0.7714,
+        "f1_score": 0.871,
+        "support": 35
+      }
+    },
+    "classes": [
+      "Social Proof",
+      "Scarcity",
+      "Urgency",
+      "Misdirection"
+    ],
+    "training_time_sec": 0.03,
+    "model_name": "Model A: TF-IDF + Logistic Regression",
+    "model_code": "model_a"
+  },
+  "Model C: Linguistic-Only": {
+    "macro_f1": 0.8663,
+    "macro_precision": 0.8712,
+    "macro_recall": 0.8624,
+    "accuracy": 0.8909,
+    "weighted_f1": 0.8897,
+    "weighted_precision": 0.8891,
+    "weighted_recall": 0.8909,
+    "roc_auc_ovr_macro": 0.9752,
+    "confusion_matrix": [
+      [
+        45,
+        1,
+        0,
+        1
+      ],
+      [
+        1,
+        96,
+        3,
+        2
+      ],
+      [
+        3,
+        6,
+        26,
+        1
+      ],
+      [
+        0,
+        1,
+        5,
+        29
+      ]
+    ],
+    "per_class": {
+      "Social Proof": {
+        "precision": 0.9184,
+        "recall": 0.9574,
+        "f1_score": 0.9375,
+        "support": 47
+      },
+      "Scarcity": {
+        "precision": 0.9231,
+        "recall": 0.9412,
+        "f1_score": 0.932,
+        "support": 102
+      },
+      "Urgency": {
+        "precision": 0.7647,
+        "recall": 0.7222,
+        "f1_score": 0.7429,
+        "support": 36
+      },
+      "Misdirection": {
+        "precision": 0.8788,
+        "recall": 0.8286,
+        "f1_score": 0.8529,
+        "support": 35
+      }
+    },
+    "classes": [
+      "Social Proof",
+      "Scarcity",
+      "Urgency",
+      "Misdirection"
+    ],
+    "training_time_sec": 0.01,
+    "model_name": "Model C: Linguistic-Only Classifier",
+    "model_code": "model_c"
+  },
+  "Model B: DistilBERT-Only": {
+    "macro_f1": 0.9721,
+    "macro_precision": 0.9737,
+    "macro_recall": 0.9708,
+    "accuracy": 0.9773,
+    "weighted_f1": 0.9771,
+    "weighted_precision": 0.9772,
+    "weighted_recall": 0.9773,
+    "roc_auc_ovr_macro": 0.9996,
+    "confusion_matrix": [
+      [
+        46,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        101,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        36,
+        0
+      ],
+      [
+        0,
+        2,
+        1,
+        32
+      ]
+    ],
+    "per_class": {
+      "Social Proof": {
+        "precision": 1.0,
+        "recall": 0.9787,
+        "f1_score": 0.9892,
+        "support": 47
+      },
+      "Scarcity": {
+        "precision": 0.9806,
+        "recall": 0.9902,
+        "f1_score": 0.9854,
+        "support": 102
+      },
+      "Urgency": {
+        "precision": 0.973,
+        "recall": 1.0,
+        "f1_score": 0.9863,
+        "support": 36
+      },
+      "Misdirection": {
+        "precision": 0.9412,
+        "recall": 0.9143,
+        "f1_score": 0.9275,
+        "support": 35
+      }
+    },
+    "classes": [
+      "Social Proof",
+      "Scarcity",
+      "Urgency",
+      "Misdirection"
+    ],
+    "training_time_sec": 65.16,
+    "best_val_macro_f1": 0.9827,
+    "model_name": "Model B: DistilBERT-Only",
+    "model_code": "model_b"
+  },
+  "Model D: Late Fusion (Proposed)": {
+    "macro_f1": 0.966,
+    "macro_precision": 0.9598,
+    "macro_recall": 0.973,
+    "accuracy": 0.9727,
+    "weighted_f1": 0.9731,
+    "weighted_precision": 0.9742,
+    "weighted_recall": 0.9727,
+    "roc_auc_ovr_macro": 0.9987,
+    "confusion_matrix": [
+      [
+        46,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        99,
+        0,
+        3
+      ],
+      [
+        0,
+        0,
+        36,
+        0
+      ],
+      [
+        0,
+        0,
+        2,
+        33
+      ]
+    ],
+    "per_class": {
+      "Social Proof": {
+        "precision": 1.0,
+        "recall": 0.9787,
+        "f1_score": 0.9892,
+        "support": 47
+      },
+      "Scarcity": {
+        "precision": 1.0,
+        "recall": 0.9706,
+        "f1_score": 0.9851,
+        "support": 102
+      },
+      "Urgency": {
+        "precision": 0.9474,
+        "recall": 1.0,
+        "f1_score": 0.973,
+        "support": 36
+      },
+      "Misdirection": {
+        "precision": 0.8919,
+        "recall": 0.9429,
+        "f1_score": 0.9167,
+        "support": 35
+      }
+    },
+    "classes": [
+      "Social Proof",
+      "Scarcity",
+      "Urgency",
+      "Misdirection"
+    ],
+    "training_time_sec": 45.96,
+    "best_val_macro_f1": 0.9774,
+    "model_name": "Model D: Semantic-Linguistic Fusion",
+    "model_code": "model_d"
+  }
+}
